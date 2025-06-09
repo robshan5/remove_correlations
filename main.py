@@ -46,7 +46,7 @@ with open(path) as file:
     df = df.astype({col: "int" for col in df.select_dtypes(include="bool").columns})
 
     # normalising the dataframe columns
-    normalized_df = (df - df.min()) / (df.max() - df.min())
+    df = (df - df.min()) / (df.max() - df.min())
 
     # detecting correlations in the dataframe
     correlations = df.corr().to_numpy()
