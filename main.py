@@ -3,13 +3,10 @@ import sys
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
 
+# Error Checking
 if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print("Enter csv file as an argument")
-    print(
-        "Optional: change default correlation threshold, enter float value after file name"
-    )
+    print("Usage: python main.py [csv_file] [Optional: correlation threshold]")
     exit(1)
 
 path = sys.argv[1]
@@ -17,7 +14,22 @@ if not os.path.exists(path):
     print("File not found")
     exit(2)
 
+THRESHOLD = 0.5
+if len(sys.argv) == 3:
+    try:
+        THRESHOLD = float(sys.argv[2])
+    except:
+        print("invalid threshold, please use a float between 0 to 1")
+        exit(3)
 
+if not 0 < THRESHOLD < 1:
+    print("invalid threshold, please use a float between 0 to 1")
+    exit(3)
+
+print(THRESHOLD)
+
+
+# reading the file
 with open(path) as file:
     """
     read file as dataframe
@@ -37,11 +49,23 @@ with open(path) as file:
     # removing correlated columns
     for i in range(correlations.shape[1]):
         for j in range(0, i):
-            if correlations[i, j] > 0.5 and i != j:
-                print(
-                    f"Columns '{df.columns[i]}' and '{df.columns[j]}' are correlated: removing '{df.columns[j]}'"
-                )
-                df = df.drop(df.columns[[j]].tolist(), axis=1)
+            if correlations[i, j] > THRESHOLD and i != j:
+                print(f"Columns '{df.columns[i]}' and '{df.columns[j]}' are correlated")
+                while True:
+                    print(f"Remove 1){df.columns[i]} or 2){df.columns[j]}")
+                    col = input()
+                    try:
+                        col = int(col)
+                    except:
+                        print("Enter float between 0-1")
+                    if col == 1:
+                        df = df.drop(df.columns[[i]].tolist(), axis=1)
+                        print(f"Removing {df.columns[i]}")
+                        break
+                    elif col == 2:
+                        df = df.drop(df.columns[[j]].tolist(), axis=1)
+                        print(f"Removing {df.columns[j]}")
+                        break
 
     result = path[:-4] + "_independent.csv"
     print(f"New csv {result} created with no correlated columns")
