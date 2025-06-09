@@ -39,6 +39,12 @@ with open(path) as file:
     """
     df = pd.read_csv(file)
 
+    # finding all categorical columns and converting them to numerical data
+    cat_cols = df.select_dtypes(include=["object", "category"]).columns
+
+    df = pd.get_dummies(df, columns=cat_cols, drop_first=False)
+    df = df.astype({col: "int" for col in df.select_dtypes(include="bool").columns})
+
     # normalising the dataframe columns
     normalized_df = (df - df.min()) / (df.max() - df.min())
 
