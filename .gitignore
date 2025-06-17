@@ -1,5 +1,6 @@
 #nix lock file
 *.lock
 
-#csv files used
+#csv and text files used
 *.csv
+*.txt
