@@ -1,5 +1,0 @@
-Pregnancies
-Glucose
-SkinThickness
-Insulin
-BMI
