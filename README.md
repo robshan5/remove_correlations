@@ -8,7 +8,7 @@ cd remove_correlations
 ```
 ## Usage
 - Run the program with:
-```
+``` bash
 python main.py -f csv_file -t threshold_value -c column_file
 ```
 ### File
