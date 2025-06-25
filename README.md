@@ -12,15 +12,15 @@ cd remove_correlations
 python main.py -f csv_file -t threshold_value -c column_file
 ```
 ### File
-` -f --file `
+- ` -f --file `
 - field for the csv file that you want to remove the correlated columns from.
 - required field
 ### Threshold
-` -t --threshold `
+- ` -t --threshold `
 - optional if you want a custom correlation threshold value
 - default value = 0.5
 ### Columns
-` -c --columns `
+- ` -c --columns `
 - optional if you want to select only certain columns to analyse
 - pass in a text file with each column on a seperate line
 - outputs a csv with the other columns, only the correlated columns are removed
