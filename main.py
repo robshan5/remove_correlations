@@ -1,18 +1,28 @@
 import argparse
 import fileinput
-import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 COLUMNS = ""
 THRESHOLD = 0.5
 
 # command line arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--file', '-f', type=str, required=True, help="Define the csv file to be checked")
-parser.add_argument('--columns', '-c', type=str, help="Define file that lists columns to be used")
-parser.add_argument('--threshold', '-t', type=float, help="Define threshold value for the correlation coefficient")
+parser.add_argument(
+    "--file", "-f", type=str, required=True, help="Define the csv file to be checked"
+)
+parser.add_argument(
+    "--columns", "-c", type=str, help="Define file that lists columns to be used"
+)
+parser.add_argument(
+    "--threshold",
+    "-t",
+    type=float,
+    help="Define threshold value for the correlation coefficient",
+)
 args = parser.parse_args()
 
 if args.columns:
@@ -63,8 +73,12 @@ with open(path) as file:
     correlations = df.corr().to_numpy()
     correlations = np.tril(correlations)
 
-    matches = [(i,j) for i in range(correlations.shape[1])
-        for j in range(correlations.shape[0]) if correlations[i, j] >= THRESHOLD and i != j]
+    matches = [
+        (i, j)
+        for i in range(correlations.shape[1])
+        for j in range(correlations.shape[0])
+        if correlations[i, j] >= THRESHOLD and i != j
+    ]
 
     deleteList = []
     for i, j in matches:
@@ -93,3 +107,7 @@ with open(path) as file:
     result = path[:-4] + "_independent.csv"
     df.to_csv(result)
     print(f"\nNew csv {result} created!")
+
+    graph = sns.pairplot(df, kind="kde")
+    graph.figure.savefig("correlations.png", dpi = 300, bbox_inches="tight")
+    print(f"\nPair plot graph created!")
